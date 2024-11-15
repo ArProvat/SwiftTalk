@@ -1,9 +1,11 @@
 import React from 'react';
+import { Outlet } from 'react-router-dom';
 
 const Home = () => {
     return (
-        <div className=' text-orange-500 text-2xl'>
-            hi this home 
+        <div className='text-orange-600 text-3xl'>
+            this is Home
+            <Outlet></Outlet>
         </div>
     );
 };
