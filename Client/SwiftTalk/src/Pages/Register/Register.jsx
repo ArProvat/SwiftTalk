@@ -3,7 +3,7 @@ import Navbar from '../Navbar/Navbar';
 import { Link } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import { MdCancel } from "react-icons/md";
-import { ToastContainer, toast } from 'react-toastify';
+import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
 import UploadFile from './../../Helper/UploadFile';
 
@@ -18,23 +18,19 @@ const Register = () => {
 
       try {
         const response=await axios.post('http://localhost:8000/api/register',data)
-        toast(response.data.message, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            transition: Bounce,
-            });
+        toast.success(response.data.message,{
+            position: 'top-right',
+            duration:3000
+          })
        /* if(response.data.success === true){
         e.target.reset()
         
       }*/
       } catch (error) {
-        console.error('Registration failed:', error.response?.data?.message || error.message);
+        toast.error(error.response?.data?.message || error.message,{
+            position: 'top-right',
+            duration: 3000
+        });
       }
     
     };
@@ -43,8 +39,8 @@ const Register = () => {
         const file = e.target.files[0];
         setUploadedFile(file);
         const UploadFileInCloudinary=await UploadFile(file)
-        console.log(UploadFileInCloudinary)
-        setValue('photoUrl',file );
+        
+        setValue('photoUrl',UploadFileInCloudinary.url);
     };
 
     const handleCleanFileUpload = (e) => {
@@ -123,6 +119,7 @@ const Register = () => {
                                         className='bg-slate-100 px-2 py-1 focus:outline-primary hidden'
                                     />
                                 </div>
+                                <p className='text-md mt-2'>You already have an account?<Link to='/login' className='underline hover:text-blue-600'>login now</Link> </p>
                                 <div className="form-control mt-6">
                                     <button className="btn btn-primary">Register</button>
                                 </div>
@@ -130,7 +127,7 @@ const Register = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div><Toaster></Toaster>
         </div>
     );
 };

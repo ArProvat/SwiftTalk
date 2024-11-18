@@ -1,26 +1,37 @@
 import React from 'react';
 import Navbar from '../Navbar/Navbar';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
+import Register from './../Register/Register';
+import { useDispatch } from 'react-redux';
+import { addUser, setToken } from '../../redux/UserRedux';
 
 const Login = () => {
-    const { register, handleSubmit } = useForm()
+    const { register, handleSubmit,reset } = useForm()
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     const onSubmit = async (data) => {
         try {
             const response = await axios.post('http://localhost:8000/api/login', data)
-           
-          console.log(response.data.message)
-          toast.success(response.data.message,{
-            position: 'top-right',
-            duration:3000
-          })
+
+            console.log(response.data)
+            toast.success(response.data.message, {
+                position: 'top-right',
+                duration: 3000
+            })
+            if (response.data.success) {
+                dispatch(setToken(response.data.token));
+                localStorage.setItem('token', response.data.token);
+                navigate('/')
+                reset();
+            }
         } catch (error) {
-        toast.error('login failed '+ error.response?.data.message,{
-            position: 'top-right',
-            duration:3000
-        });
+            toast.error('login failed ' + error.response?.data.message, {
+                position: 'top-right',
+                duration: 3000
+            });
         }
     }
     return (
@@ -55,6 +66,9 @@ const Login = () => {
                                 <label className="label">
                                     <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
                                 </label>
+                                <label className=''>
+                                    <a href="#" className="label-text-alt ">You don't have any account yet? <Link to='/register' className='underline hover:text-blue-600'> Register now</Link> </a>
+                                </label>
                                 <div className="form-control mt-6">
                                     <button className="btn btn-primary">Register</button>
                                 </div>
@@ -64,7 +78,7 @@ const Login = () => {
                 </div>
             </div>
 
-<Toaster></Toaster>
+            <Toaster></Toaster>
         </div>
     );
 };
