@@ -1,37 +1,55 @@
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { addUser, setToken } from '../../redux/UserRedux';
-import { consumeCollection } from './../../../node_modules/reselect/src/autotrackMemoize/tracking';
+import Slidebar from '../../Components/Slidebar/Slidebar';
 
 const Home = () => {
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
-    const selector = useSelector(state => state.user)
-    console.log(selector)
-    useEffect( () => {
-        try {
-          const userDataFetch=async()=>{ 
-             const response = await axios.get('http://localhost:8000/api/user')
-            console.log(response.data)
-            dispatch(addUser(response.data));
-            if (!response.data.logout) {
-                dispatch(setToken());
-                navigate('/login');
-            }}
-            userDataFetch();
-            return ()=>{}
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const selector = useSelector((state) => state.user);
+    const location = useLocation();
 
-        } catch (error) {
-            console.error(error);
-        }
-    }, [])
+    useEffect(() => {
+        const userDataFetch = async () => {
+            try {
+               
+                const response = await axios.get('http://localhost:8000/api/user', {
+                    withCredentials: true,
+                });
+                if (response.data.result.logout) {
+                    dispatch(setToken(null)); 
+                    localStorage.removeItem('token'); 
+                    navigate('/login'); 
+                } else {
+                    dispatch(addUser(response.data.result));
+
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error.response?.data || error.message);
+
+                if (error.response?.status === 401) {
+                    dispatch(setToken(null));
+                    localStorage.removeItem('token');
+                  
+                }
+            }
+        };
+
+        userDataFetch();
+    }, []);
+
     return (
-        <div className='text-orange-600 text-3xl'>
-            this is Home
-            <Outlet></Outlet>
-        </div>
+        <div className="h-screen grid md:grid-cols-7 bg-zinc-950">
+        <section className="col-span-2  h-full ">
+            <Slidebar />
+        </section>
+        <section className="col-span-5 bg-slate-100 h-full overflow-y-auto">
+            <Outlet/>
+        </section>
+    
+</div>
     );
 };
 

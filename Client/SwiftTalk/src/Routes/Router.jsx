@@ -4,6 +4,7 @@ import Login from '../Pages/Login/Login'
 import Register from "../Pages/Register/Register";
 import App from "../App";
 import MessagePage from "../Components/MessagePages/MessagePage";
+import Private_Route from "../Components/Private_Route/Private_Route";
 
 const router = createBrowserRouter([
     {
@@ -18,11 +19,11 @@ const router = createBrowserRouter([
                 element: <Register></Register>
             },
             {
-                path: '/',
-                element: <Home></Home>,
+                path: '/home',
+                element: <Private_Route><Home></Home></Private_Route>,
                 children: [
                     {
-                        path: ':userId',
+                        path: '/home',
                         element: <MessagePage />
                     }
                 ]
@@ -30,6 +31,14 @@ const router = createBrowserRouter([
 
         ]
     }
-])
+],{
+    future: {
+        v7_startTransition: true,
+        v7_relativeSplatPath: true,
+        v7_fetcherPersist: true,
+        v7_normalizeFormMethod: true,
+        v7_partialHydration: true,
+        v7_skipActionErrorRevalidation: true,
+    }})
 
 export default router;
