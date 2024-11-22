@@ -6,7 +6,7 @@ import { RxAvatar } from "react-icons/rx";
 import { MdOutlineEditNote } from "react-icons/md";
 
 
-const Slidebar = () => {
+const Sidebar = () => {
     const Selector = useSelector((state) => state.user);
 
     return (
@@ -60,4 +60,4 @@ const Slidebar = () => {
     );
 };
 
-export default Slidebar;
+export default Sidebar;

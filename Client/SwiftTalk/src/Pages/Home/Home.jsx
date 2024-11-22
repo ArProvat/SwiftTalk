@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { addUser, setToken } from '../../redux/UserRedux';
-import Slidebar from '../../Components/Slidebar/Slidebar';
+import Sidebar from '../../Components/Sidebar/Sidebar';
 
 const Home = () => {
     const dispatch = useDispatch();
@@ -43,7 +43,7 @@ const Home = () => {
     return (
         <div className="h-screen grid md:grid-cols-7 bg-zinc-950">
         <section className="col-span-2  h-full ">
-            <Slidebar />
+            <Sidebar />
         </section>
         <section className="col-span-5 bg-slate-100 h-full overflow-y-auto">
             <Outlet/>
