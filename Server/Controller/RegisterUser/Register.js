@@ -5,6 +5,7 @@ const registerUser = async (req, res) => {
     try {
         const { name, email, password, photoUrl } = req.body;
 
+        console.log(photoUrl)
         // Validate required fields
         if (!name || !email || !password) {
             return res.status(400).json({ message: 'Name, email, and password are required' });
@@ -30,7 +31,6 @@ const registerUser = async (req, res) => {
 
         // Save the user to the database
         const result = await newUser.save();
-
         return res.status(201).json({
             message: 'User registered successfully',
             data: result,

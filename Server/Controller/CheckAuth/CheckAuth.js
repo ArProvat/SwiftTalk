@@ -27,7 +27,7 @@ const CheckAuth = async (req, res) => {
         const token = await jwt.sign(payload,process.env.SECRET_KEY,{expiresIn: '7d'})
        
         const cookieOptions ={
-            http :true,
+            httpOnly :true,
             secure:true,
         }
         return res.cookie("token",token,cookieOptions).status(200).json({

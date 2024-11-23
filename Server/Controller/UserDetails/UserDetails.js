@@ -3,8 +3,8 @@ const users = require('../../Models/UsersModel/UsersModel')
 
 const UserDetails=async(req,res)=>{
   try {
-      const token = req.cookies.token||'';
-
+    const token = req.cookies.token;
+    console.log(token);
      const result = await getUserByToken(token);
 
      res.json({

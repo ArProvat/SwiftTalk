@@ -4,6 +4,7 @@ const CheckAuth = require('../Controller/CheckAuth/CheckAuth');
 const UserDetails = require('../Controller/UserDetails/UserDetails');
 const logout = require('../Controller/Logout/Logout');
 const UpdateUse = require('../Controller/UpdateUser/UpdateUser');
+const  SearchUser = require('../Controller/SearchUser/SearchUser');
 const router = express.Router()
 
 router.post("/register",registerUser)
@@ -15,5 +16,7 @@ router.get("/user", UserDetails);
 router.post("/logout",logout);
 // Update user
 router.put("/update",UpdateUse);
+//search user
+router.post("/search",SearchUser);
 
 module.exports = router
