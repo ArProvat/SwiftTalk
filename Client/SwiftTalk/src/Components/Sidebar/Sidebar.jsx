@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import logo from '../../assets/Logo_swiftTalk.jpg';
 import { TbLogout2 } from "react-icons/tb";
 import { useSelector } from 'react-redux';
 import { RxAvatar } from "react-icons/rx";
 import { MdOutlineEditNote } from "react-icons/md";
+import { IoMdPersonAdd } from "react-icons/io";
+import SearchPerson from '../SearchPerson/SearchPerson';
 
 
 const Sidebar = () => {
     const Selector = useSelector((state) => state.user);
-
+    const [openSearch, setopenSearch] = useState(false)
     return (
         <div className="px-3 py-2 h-screen flex flex-col justify-between">
             {/* Header */}
@@ -28,7 +30,10 @@ const Sidebar = () => {
 
             {/* Middle Content */}
             <div className="flex-1 overflow-y-auto">
-                <p className="text-center text-gray-500 py-4">Conector</p>
+                < div className='flex py-2 justify-between items-center'>
+                    <h3 className='text-2xl text-white font-semibold '>Messages</h3>
+                    < IoMdPersonAdd onClick={() => setopenSearch(!openSearch)} title='Add person' className='text-3xl text-white hover:cursor-pointer' />
+                </div>
             </div>
 
             {/* Footer */}
@@ -43,19 +48,22 @@ const Sidebar = () => {
                     ) : (
                         <RxAvatar
                             className="h-12 w-12"
-                            aria-hidden="true"
+
                         />
                     )}
 
-                  
+
                     <p className="text-xl font-semibold text-white mx-3">
                         {Selector?.username || "Guest"}
                     </p>
                 </div>
-<div className='h-12 w-12 rounded-full hover:border hover:border-[rgb(172,29,36)] flex justify-center items-center '>
-<MdOutlineEditNote className='text-4xl text-white'></MdOutlineEditNote>
-</div>
+                <div className='h-10 w-10 rounded-full hover:border hover:border-[rgb(172,29,36)] flex justify-center items-center '>
+                    <MdOutlineEditNote className='text-4xl text-white'></MdOutlineEditNote>
+                </div>
             </div>
+            {
+                openSearch && <SearchPerson />
+            }
         </div>
     );
 };

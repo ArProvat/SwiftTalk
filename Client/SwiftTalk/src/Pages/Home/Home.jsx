@@ -4,12 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { addUser, setToken } from '../../redux/UserRedux';
 import Sidebar from '../../Components/Sidebar/Sidebar';
+import logo from '../../assets/Logo_swiftTalk.jpg';
 
 const Home = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const selector = useSelector((state) => state.user);
     const location = useLocation();
+ 
 
     useEffect(() => {
         const userDataFetch = async () => {
@@ -39,15 +41,19 @@ const Home = () => {
 
         userDataFetch();
     }, []);
-
+   const basepath = location.pathname === '/'
     return (
-        <div className="h-screen grid md:grid-cols-7 bg-zinc-950">
-        <section className="col-span-2  h-full ">
+        <div className={`h-screen grid md:grid-cols-7 max-h-screen bg-zinc-950  `}>
+        <section className={`col-span-2 max-lg:col-span-3 max-lg:w-screen h-full ${!basepath&& 'hidden'} lg:block`}>
             <Sidebar />
         </section>
-        <section className="col-span-5 bg-slate-100 h-full overflow-y-auto">
+        <section className={`col-span-5 bg-slate-100 h-full overflow-y-auto ${basepath && 'hidden'}`}>
             <Outlet/>
         </section>
+        <div className={` flex-col col-span-5 justify-center items-center gap-2 bg-white ${!basepath?'hidden':'lg:flex'}`}>
+            <img src={logo} alt='logo' className='h-14 w-56 rounded-md' />
+            <p className='text-xl font-semibold shadow-sm '>Connect with your homies</p>
+        </div>
     
 </div>
     );

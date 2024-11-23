@@ -9,21 +9,21 @@ import Private_Route from "../Components/Private_Route/Private_Route";
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <App />,
+        element: <App/>,
         children: [
             {
-                path: '/login',
+                path: 'login',
                 element: <Login></Login>
             }, {
                 path: '/register',
                 element: <Register></Register>
             },
             {
-                path: '/home',
-                element: <Private_Route><Home></Home></Private_Route>,
+                path: "",
+                element: <Home></Home>,
                 children: [
                     {
-                        path: '/home',
+                        path: ':userId',
                         element: <MessagePage />
                     }
                 ]

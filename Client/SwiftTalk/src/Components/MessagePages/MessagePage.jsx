@@ -5,7 +5,7 @@ import Header from '../../Pages/Header/Header';
 const MessagePage = () => {
     return (
         <div>
-
+this message
         </div>
     );
 };
