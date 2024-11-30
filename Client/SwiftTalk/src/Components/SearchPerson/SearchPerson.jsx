@@ -3,11 +3,15 @@ import React, { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { IoSearchOutline } from "react-icons/io5";
 import UserCard from '../UserCard/UserCard';
+import { Link } from 'react-router-dom';
+import { ImCancelCircle } from "react-icons/im";
 
-const SearchPerson = () => {
-    const [searchUser, setSearchUser] = useState([]); 
+
+const SearchPerson = ({ isOpen }) => {
+    const [searchUser, setSearchUser] = useState([]);
     const [loading, setLoading] = useState(false);
     const [SearchValue, setSearchValue] = useState('');
+
 
     const handleSubmit = async () => {
         try {
@@ -17,30 +21,26 @@ const SearchPerson = () => {
                 { search: SearchValue }
             );
             console.log(response.data.User);
-            setSearchUser(response.data.data || []); 
+            setSearchUser(response.data.User || []);
         } catch (error) {
             toast.error(error.response?.data?.message || error.message);
         } finally {
-            setLoading(false); 
+            setLoading(false);
         }
     };
 
     useEffect(() => {
-        const delayDebounceFn = setTimeout(() => {
-            if (SearchValue) {
-                handleSubmit(); 
-            } else {
-                setSearchUser([]); 
-            }
-        }, 500); 
 
-        return () => clearTimeout(delayDebounceFn); 
+        handleSubmit();
+
+
+
     }, [SearchValue]);
-console.log(searchUser);
+    console.log(searchUser);
     return (
         <div className="fixed top-0 left-0 right-0 bottom-0 bg-slate-700 bg-opacity-40">
             <div className="w-full mx-auto flex flex-col max-w-md mt-28 lg:mt-20">
-             
+
                 <div className="h-12 w-full rounded-lg overflow-hidden flex bg-white">
                     <input
                         className="w-full px-4 py-2 h-full outline-none"
@@ -54,7 +54,7 @@ console.log(searchUser);
                     </div>
                 </div>
 
-                
+
                 <div className="mt-2 bg-white rounded-lg">
                     {loading && <p className="text-center text-zinc-500">Loading...</p>}
                     {!loading && searchUser.length === 0 && (
@@ -63,11 +63,16 @@ console.log(searchUser);
                     {!loading &&
                         searchUser.length !== 0 &&
                         searchUser.map((user) => (
-                            <UserCard key={user._id} user={user} />
+                            <UserCard key={user._id} user={user} open={open} />
                         ))}
                 </div>
+
+                <div className='absolute top-10 right-12'>
+                    <Link to='/' onClick={() => isOpen(false)}  ><ImCancelCircle title='Go back' className='text-2xl text-zinc-700 hover:text-zinc-950 ' /></Link>
+                </div>
+
             </div>
-            <Toaster /> 
+            <Toaster />
         </div>
     );
 };

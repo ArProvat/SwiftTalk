@@ -62,7 +62,7 @@ const Sidebar = () => {
                 </div>
             </div>
             {
-                openSearch && <SearchPerson />
+                openSearch && <SearchPerson isOpen={setopenSearch} />
             }
         </div>
     );
