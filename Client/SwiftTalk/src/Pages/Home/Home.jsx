@@ -5,13 +5,26 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { addUser, logout, setToken } from '../../redux/UserRedux';
 import Sidebar from '../../Components/Sidebar/Sidebar';
 import logo from '../../assets/Logo_swiftTalk.jpg';
+import io from 'socket.io-client'
 
 const Home = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const selector = useSelector((state) => state.user);
     const location = useLocation();
- 
+    
+    useEffect(()=>{
+const socketConnections = io('http://localhost:8000',{
+    auth:{
+        token:localStorage.getItem('token')
+
+    }
+})
+socketConnections.on('onlineUsers',data => {
+    console.log(data);
+})
+return ()=>{socketConnections.disconnect();}
+    },[])
 
     useEffect(() => {
         const userDataFetch = async () => {
