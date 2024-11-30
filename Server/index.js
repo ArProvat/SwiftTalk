@@ -4,8 +4,8 @@ require('dotenv').config();
 var cookieParser = require('cookie-parser')
 const DB_connection = require('./Config/DB-Config/DB-Config');
 const router = require('./routers/Routers');
-
-const app = express();
+const {app,server} = require('./Socket/Socket')
+//const app = express();
 
 const PORT = process.env.PORT || 8000;
 app.use(cookieParser());
@@ -22,7 +22,7 @@ app.use('/api',router)
 
 DB_connection().then(()=>{
     
-    app.listen(PORT,()=>{
+    server.listen(PORT,()=>{
         console.log('listening on port',PORT);
     })
 })
