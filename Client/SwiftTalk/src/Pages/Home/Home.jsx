@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { addUser, setToken } from '../../redux/UserRedux';
+import { addUser, logout, setToken } from '../../redux/UserRedux';
 import Sidebar from '../../Components/Sidebar/Sidebar';
 import logo from '../../assets/Logo_swiftTalk.jpg';
 
@@ -21,7 +21,8 @@ const Home = () => {
                     withCredentials: true,
                 });
                 if (response.data.result.logout) {
-                    dispatch(setToken(null)); 
+                    dispatch(setToken(null));
+                     dispatch(logout())
                     localStorage.removeItem('token'); 
                     navigate('/login'); 
                 } else {

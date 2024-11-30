@@ -1,16 +1,33 @@
 import React, { useState } from 'react';
 import logo from '../../assets/Logo_swiftTalk.jpg';
 import { TbLogout2 } from "react-icons/tb";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RxAvatar } from "react-icons/rx";
 import { MdOutlineEditNote } from "react-icons/md";
 import { IoMdPersonAdd } from "react-icons/io";
 import SearchPerson from '../SearchPerson/SearchPerson';
+import { logout, setToken } from '../../redux/UserRedux'
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 const Sidebar = () => {
     const Selector = useSelector((state) => state.user);
-    const [openSearch, setopenSearch] = useState(false)
+    const [openSearch, setopenSearch] = useState(false);
+    const dispatch = useDispatch()
+    const selector = useSelector((state) => state.user)
+    const navigate= useNavigate()
+
+    const handleLogout =async () =>{
+       const response=await axios.post('http://localhost:8000/api/logout', {}, { withCredentials: true });
+
+        localStorage.clear();
+        dispatch(logout())
+        dispatch(setToken(null)); 
+        navigate('/login');
+        console.log(response)
+    }
+    console.log(selector)
     return (
         <div className="px-3 py-2 h-screen flex flex-col justify-between">
             {/* Header */}
@@ -20,11 +37,11 @@ const Sidebar = () => {
                     alt="SwiftTalk Logo"
                     className="h-12 w-36 rounded-md"
                 />
-                <div
+                <div 
                     title="Logout"
                     className="h-10 w-10 rounded-full border flex justify-center items-center hover:bg-red-600 border-red-600 cursor-pointer"
                 >
-                    <TbLogout2 className="text-3xl text-white" />
+                    <TbLogout2 onClick={handleLogout} className="text-3xl text-white" />
                 </div>
             </div>
 

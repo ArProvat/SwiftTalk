@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { IoSearchOutline } from "react-icons/io5";
 import UserCard from '../UserCard/UserCard';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { ImCancelCircle } from "react-icons/im";
 
 
@@ -11,7 +11,8 @@ const SearchPerson = ({ isOpen }) => {
     const [searchUser, setSearchUser] = useState([]);
     const [loading, setLoading] = useState(false);
     const [SearchValue, setSearchValue] = useState('');
-
+    const location = useLocation()
+    console.log(location);
 
     const handleSubmit = async () => {
         try {
@@ -28,7 +29,7 @@ const SearchPerson = ({ isOpen }) => {
             setLoading(false);
         }
     };
-
+ 
     useEffect(() => {
 
         handleSubmit();
@@ -63,12 +64,12 @@ const SearchPerson = ({ isOpen }) => {
                     {!loading &&
                         searchUser.length !== 0 &&
                         searchUser.map((user) => (
-                            <UserCard key={user._id} user={user} open={open} />
+                            <UserCard key={user._id} user={user} Open={isOpen} />
                         ))}
                 </div>
 
                 <div className='absolute top-10 right-12'>
-                    <Link to='/' onClick={() => isOpen(false)}  ><ImCancelCircle title='Go back' className='text-2xl text-zinc-700 hover:text-zinc-950 ' /></Link>
+                    <Link to={location.pathname} ><ImCancelCircle title='Go back' onClick={() => isOpen(false)}  className='text-2xl text-zinc-700 hover:text-zinc-950 ' /></Link>
                 </div>
 
             </div>

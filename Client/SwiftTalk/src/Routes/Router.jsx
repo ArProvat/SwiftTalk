@@ -20,7 +20,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "",
-                element: <Home></Home>,
+                element:<Private_Route><Home></Home></Private_Route> ,
                 children: [
                     {
                         path: ':userId',
