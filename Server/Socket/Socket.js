@@ -4,6 +4,8 @@ const { Server } = require('socket.io')
 const http = require('http')
 const { Socket } = require('dgram')
 const getUserByToken = require('../helper/getUserByToken/getUserByToken')
+const userModel = require('../Models/UsersModel/UsersModel')
+const { promiseHooks } = require('v8')
 
 const server = http.createServer(app)
 
@@ -23,8 +25,21 @@ io.on('connection', async (Socket) => {
 
     user = await getUserByToken(token)
     Socket.join(user._id)
-    OnlineUsers.add(user._id)
+    OnlineUsers.add(user._id.toString())
     io.emit('onlineUsers', Array.from(OnlineUsers))
+
+    Socket.on('message_page',async(data) =>{
+        console.log('message_page', data)
+        const userDetails = await userModel.findById(data).select('-password')
+        const payload = {
+            User_id: userDetails._id,
+            name: userDetails.name,
+            email: userDetails.email,
+            photo: userDetails.photoUrl,
+            online: OnlineUsers.has(data)
+        }
+        Socket.emit('message_user', payload)
+    })
 
     Socket.on('disconnect', () => {
         OnlineUsers.delete(user._id)
