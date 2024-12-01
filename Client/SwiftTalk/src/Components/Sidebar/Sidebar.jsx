@@ -16,18 +16,24 @@ const Sidebar = () => {
     const [openSearch, setopenSearch] = useState(false);
     const dispatch = useDispatch()
     const selector = useSelector((state) => state.user)
-    const navigate= useNavigate()
+    const navigate = useNavigate()
 
-    const handleLogout =async () =>{
-       const response=await axios.post('http://localhost:8000/api/logout', {}, { withCredentials: true });
+    const handleLogout = async () => {
+        try {
+            const response = await axios.post('http://localhost:8000/api/logout', {}, { withCredentials: true });
+            if (response.data.status === 200) {
+                localStorage.clear();
+                dispatch(logout())
+                dispatch(setToken(null));
+                navigate('/login');
+                console.log(response)
+            }
+        }
+        catch (err) {
 
-        localStorage.clear();
-        dispatch(logout())
-        dispatch(setToken(null)); 
-        navigate('/login');
-        console.log(response)
+        }
     }
-    console.log(selector)
+
     return (
         <div className="px-3 py-2 h-screen flex flex-col justify-between">
             {/* Header */}
@@ -37,7 +43,7 @@ const Sidebar = () => {
                     alt="SwiftTalk Logo"
                     className="h-12 w-36 rounded-md"
                 />
-                <div 
+                <div
                     title="Logout"
                     className="h-10 w-10 rounded-full border flex justify-center items-center hover:bg-red-600 border-red-600 cursor-pointer"
                 >

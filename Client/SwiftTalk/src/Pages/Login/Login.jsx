@@ -71,7 +71,7 @@ Connect with your friend and family to get started with SwiftTalk
                                     <p  className="label-text-alt ">You don't have any account yet? <Link to='/register' className='underline hover:text-blue-600'> Register now</Link> </p>
                                 </label>
                                 <div className="form-control mt-6">
-                                    <button className="btn btn-primary">Register</button>
+                                    <button className="btn btn-primary">Login</button>
                                 </div>
                             </form>
                         </div>
