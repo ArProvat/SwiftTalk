@@ -12,7 +12,6 @@ const Home = () => {
     const navigate = useNavigate();
     const selector = useSelector((state) => state.user);
     const location = useLocation();
-    console.log(selector)
     useEffect(()=>{
 const socketConnections = io('http://localhost:8000',{
     auth:{
@@ -21,7 +20,6 @@ const socketConnections = io('http://localhost:8000',{
     }
 })
 socketConnections.on('onlineUsers',data => {
-    console.log(data);
     dispatch(setOnlineUser(data))
 })
 dispatch(SocketConnection(socketConnections))
