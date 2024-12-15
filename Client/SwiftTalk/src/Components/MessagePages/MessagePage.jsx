@@ -5,13 +5,19 @@ import Profile_Avater from '../Profile_Avater/Profile_Avater';
 import { FiSend } from "react-icons/fi";
 import { GrAttachment } from "react-icons/gr";
 import UploadFile from './../../Helper/UploadFile';
+import { IoClose } from 'react-icons/io5';
 
 const MessagePage = () => {
     const params = useParams();
     const messagesEndRef = useRef(null);
+    const [openImageVideoUpload, setOpenImageVideoUpload] = useState(false)
+
     const [Messages, setMessage] = useState({
         text: '',
-        fileUrl: '',
+        fileDetails: {
+            Url: '',
+            Format: '',
+        },
     });
     const SocketConnection = useSelector((state) => state.user.SocketConnection);
     const user = useSelector((state) => state.user);
@@ -38,13 +44,16 @@ const MessagePage = () => {
 
         try {
             const fileResult = await UploadFile(file);
+            console.log(fileResult)
             setMessage((prev) => ({
                 ...prev,
-                fileUrl: fileResult
+                fileDetails: {
+                    Url: fileResult.url,
+                    Format: fileResult.format,
+                },
             }));
         } catch (error) {
             console.error("File upload failed:", error);
-            // Optionally show a toast or error message to the user
         }
     };
 
@@ -54,26 +63,35 @@ const MessagePage = () => {
             text: e.target.value,
         }));
     };
-
+    const handleClearUploadFile = () => {
+        setMessage(preve => {
+            return {
+                ...preve,
+                fileDetails: {
+                    Url: '',
+                    Format: ''
+                },
+            }
+        })
+    }
     useEffect(() => {
         if (SocketConnection) {
-            // Fetch user details
             SocketConnection.emit('message_page', params.userId);
             SocketConnection.on('message_user', (data) => {
                 SetUserDetails(data);
             });
 
             SocketConnection.on('message', (data) => {
+                console.log('messages', data);
                 SetAllMessages(data);
             });
 
-            
+
             SocketConnection.on('error', (error) => {
                 console.error("Socket error:", error);
-                // Optionally show error to user
             });
 
-           
+
             return () => {
                 SocketConnection.off('message_user');
                 SocketConnection.off('message');
@@ -87,17 +105,20 @@ const MessagePage = () => {
 
 
         const sendMessage = {
-            sender: user?.user_id ,
+            sender: user?.user_id,
             receiver: params.userId,
             text: Messages.text,
-            fileUrl: Messages.fileUrl
+            fileDetails: Messages.fileDetails,
         };
-        
+
         if (SocketConnection) {
             SocketConnection.emit('new message', sendMessage);
             setMessage({
                 text: "",
-                fileUrl: ""
+                fileDetails: {
+                    Url: '',
+                    Format: ''
+                },
             });
         }
     };
@@ -105,22 +126,32 @@ const MessagePage = () => {
     const MessageItem = ({ message, isOwnMessage }) => {
         return (
             <div className={`flex mb-4 ${isOwnMessage ? 'justify-end' : 'justify-start'}`}>
-                <div 
+                <div
                     className={`
                         max-w-[70%] p-3 rounded-lg 
-                        ${isOwnMessage 
-                            ? 'bg-blue-500 text-white' 
-                            : 'bg-gray-200 text-black'}
+                        ${!message.fileDetails.Url&&
+                           ( isOwnMessage
+                            ? 'bg-blue-500 text-white'
+                            : 'bg-gray-200 text-black')}
                     `}
                 >
+                    <div className='w-full '>
+                        {message.fileDetails.Url && (
+                            message.fileDetails.Format === 'mp4' ? (
+                                <video src={message.fileDetails.Url} alt="Attached video" 
+                                controls
+                                className="w-full h-full z-10 rounded-md mt-2 object-scale-down" />
+                            ) : (
+                                <img src={message.fileDetails.Url} alt="Attached" className="w-full h-full z-10 rounded-md mt-2" />
+                            )
+                        )}
+
+                        {
+
+                        }
+                    </div>
                     {message.text && <p>{message.text}</p>}
-                    {message.FileUrl && (
-                        <img 
-                            src={message.FileUrl} 
-                            alt="Attached" 
-                            className="max-w-full h-auto rounded-md mt-2"
-                        />
-                    )}
+
                     <span className="text-xs block mt-1 opacity-70">
                         {new Date(message.createdAt).toLocaleTimeString()}
                     </span>
@@ -132,29 +163,50 @@ const MessagePage = () => {
     return (
         <div className="flex flex-col h-screen bg-gray-100">
             <div className="shadow-md">
-                <Profile_Avater 
-                    User_id={UserDetails.User_id} 
-                    PhotoUrl={UserDetails.photo} 
-                    name={UserDetails.name} 
-                    isOnline={UserDetails.online} 
+                <Profile_Avater
+                    User_id={UserDetails.User_id}
+                    PhotoUrl={UserDetails.photo}
+                    name={UserDetails.name}
+                    isOnline={UserDetails.online}
                 />
             </div>
-
-            <div className="flex-grow overflow-y-auto p-4 space-y-4">
+          
+            <div className="flex-grow overflow-y-auto relative p-4 space-y-4">
                 {
                     AllMessages.map((message) => (
-                        <MessageItem 
-                            key={message._id }
-                            message={message} 
+                        <MessageItem
+                            key={message._id}
+                            message={message}
                             isOwnMessage={message.msgSendBy === user?.user_id}
                         />
                     ))
                 }
-               
+
                 <div ref={messagesEndRef} />
+
+                {
+                    Messages.fileDetails.Url && (
+                        <div className='w-full h-full sticky bottom-0 bg-slate-700 bg-opacity-30 flex justify-center items-center rounded overflow-hidden'>
+                            <div className='w-fit p-2 absolute top-0 right-0 cursor-pointer hover:text-red-600' onClick={handleClearUploadFile}>
+                                <IoClose size={30} />
+                            </div>
+                            <div className='bg-white p-3'>
+                            {
+                            Messages.fileDetails.Format === 'mp4' ? (
+                                <video src={Messages.fileDetails.Url} alt="Attached video" 
+                                controls
+                                className="w-full h-full z-10 rounded-md mt-2 object-scale-down aspect-video" />
+                            ) : (
+                                <img src={Messages.fileDetails.Url} alt="Attached" className="w-full h-full z-10 rounded-md mt-2 object-scale-down aspect-square" />
+                            )
+                        }                              
+                            </div>
+                        </div>
+                    )
+                }
             </div>
 
-          
+
             <div className="bg-white p-4 flex items-center space-x-2">
                 <input
                     type="file"
@@ -167,8 +219,8 @@ const MessagePage = () => {
                     htmlFor="fileInput"
                     className="cursor-pointer text-gray-600 hover:text-blue-500"
                 >
-                    <div 
-                        title='Attachment' 
+                    <div
+                        title='Attachment'
                         className='flex justify-center items-center w-10 h-10 rounded-full bg-slate-200'
                     >
                         <GrAttachment size={25} />

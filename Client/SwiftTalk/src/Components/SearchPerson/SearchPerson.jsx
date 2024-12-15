@@ -64,12 +64,12 @@ const SearchPerson = ({ isOpen }) => {
                     {!loading &&
                         searchUser.length !== 0 &&
                         searchUser.map((user) => (
-                            <UserCard key={user._id} user={user} Open={isOpen} />
+                            <UserCard key={user._id} user={user} IsOpen={isOpen} />
                         ))}
                 </div>
 
                 <div className='absolute top-10 right-12'>
-                    <Link to={location.pathname} ><ImCancelCircle title='Go back' onClick={() => isOpen(false)}  className='text-2xl text-zinc-700 hover:text-zinc-950 ' /></Link>
+                    <Link to={location.pathname} ><ImCancelCircle title='Go back' onClick={isOpen}  className='text-2xl text-zinc-700 hover:text-zinc-950 ' /></Link>
                 </div>
 
             </div>

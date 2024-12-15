@@ -55,7 +55,7 @@ const Sidebar = () => {
             <div className="flex-1 overflow-y-auto">
                 < div className='flex py-2 justify-between items-center'>
                     <h3 className='text-2xl text-white font-semibold '>Messages</h3>
-                    < IoMdPersonAdd onClick={() => setopenSearch(!openSearch)} title='Add person' className='text-3xl text-white hover:cursor-pointer' />
+                    < IoMdPersonAdd onClick={() => setopenSearch(true)} title='Add person' className='text-3xl text-white hover:cursor-pointer' />
                 </div>
             </div>
 
@@ -85,7 +85,7 @@ const Sidebar = () => {
                 </div>
             </div>
             {
-                openSearch && <SearchPerson isOpen={setopenSearch} />
+                openSearch && <SearchPerson isOpen={()=>{setopenSearch(false)}} />
             }
         </div>
     );
