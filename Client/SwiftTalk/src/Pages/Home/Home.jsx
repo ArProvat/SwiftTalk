@@ -65,7 +65,7 @@ return ()=>{socketConnections.disconnect();}
         <section className={`col-span-5 bg-slate-100 h-full overflow-y-auto ${basepath && 'hidden'}`}>
             <Outlet/>
         </section>
-        <div className={` flex-col col-span-5 justify-center items-center gap-2 bg-white ${!basepath?'hidden':'lg:flex'}`}>
+        <div className={` max-lg:hidden flex-col col-span-5 justify-center items-center gap-2 bg-white ${!basepath?'hidden':'lg:flex' }`}>
             <img src={logo} alt='logo' className='h-14 w-56 rounded-md' />
             <p className='text-xl font-semibold shadow-sm '>Connect with your homies</p>
         </div>

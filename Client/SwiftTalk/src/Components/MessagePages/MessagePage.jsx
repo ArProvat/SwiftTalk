@@ -10,7 +10,6 @@ import { IoClose } from 'react-icons/io5';
 const MessagePage = () => {
     const params = useParams();
     const messagesEndRef = useRef(null);
-    const [openImageVideoUpload, setOpenImageVideoUpload] = useState(false)
 
     const [Messages, setMessage] = useState({
         text: '',
@@ -85,7 +84,7 @@ const MessagePage = () => {
                 console.log('messages', data);
                 SetAllMessages(data);
             });
-
+          SocketConnection.emit('seen', params.userId);
 
             SocketConnection.on('error', (error) => {
                 console.error("Socket error:", error);
@@ -140,7 +139,7 @@ const MessagePage = () => {
                             message.fileDetails.Format === 'mp4' ? (
                                 <video src={message.fileDetails.Url} alt="Attached video" 
                                 controls
-                                className="w-full h-full z-10 rounded-md mt-2 object-scale-down" />
+                                className="w-full h-full  rounded-md mt-2 object-scale-down" />
                             ) : (
                                 <img src={message.fileDetails.Url} alt="Attached" className="w-full h-full z-10 rounded-md mt-2" />
                             )

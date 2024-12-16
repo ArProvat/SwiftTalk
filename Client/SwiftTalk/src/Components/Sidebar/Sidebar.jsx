@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import logo from '../../assets/Logo_swiftTalk.jpg';
 import { TbLogout2 } from "react-icons/tb";
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,19 +8,55 @@ import { IoMdPersonAdd } from "react-icons/io";
 import SearchPerson from '../SearchPerson/SearchPerson';
 import { logout, setToken } from '../../redux/UserRedux'
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import Profile_Avater from '../Profile_Avater/Profile_Avater';
 
 
 const Sidebar = () => {
     const Selector = useSelector((state) => state.user);
-    const 
+    const SocketConnection = useSelector((state) => state.user.SocketConnection);
+    const UserEndRef = useRef(null);
+
     const [openSearch, setopenSearch] = useState(false);
     const dispatch = useDispatch()
     const selector = useSelector((state) => state.user)
     const navigate = useNavigate()
-useEffect(()=>{
+    const [AllUsers, setAllUsers] = useState([])
+    const scrollToBottom = () => {
+            UserEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        };
+    
+        useEffect(() => {
+            scrollToBottom();
+        }, [AllUsers]);
+    useEffect(() => {
+        if (SocketConnection) {
+            console.log(selector)
+            SocketConnection.emit('sidebar', selector.user_id)
+            SocketConnection.on('conversation', (data) => {
+                console.log('conversation', data);
+                const conversationUserdata = data.map((conversation) => {
+                    if (conversation.receiver._id !== selector.user_id) {
+                        return {
+                            ...conversation,
+                            userDetails: conversation.receiver
 
-},[])
+                        }
+                    }
+                    else {
+                        return {
+                            ...conversation,
+                            userDetails: conversation.sender
+                        }
+                    }
+
+                })
+                setAllUsers(conversationUserdata)
+            })
+
+        }
+    }, [SocketConnection, selector])
+    console.log('alluser', AllUsers)
     const handleLogout = async () => {
         try {
             const response = await axios.post('http://localhost:8000/api/logout', {}, { withCredentials: true });
@@ -61,9 +97,51 @@ useEffect(()=>{
                     < IoMdPersonAdd onClick={() => setopenSearch(true)} title='Add person' className='text-3xl text-white hover:cursor-pointer' />
                 </div>
                 {
+                    AllUsers.map(conversationData => {
+                        return (
+                            <Link to={'/' + conversationData.userDetails._id}
+                                key={conversationData.userDetails._id}>
+                                <div className="flex h-14 items-center gap-1 mx-1 mt-2 rounded-xl bg-slate-200 px-4 py-2  hover:ring-2 focus:ring-2 hover:ring-blue-500">
+                                    {conversationData.userDetails.photoUrl ? (
+                                        <img
+                                            src={conversationData.userDetails.photoUrl}
+                                            alt="Profile photo"
+                                            className="h-12 w-12 rounded-full"
+                                        />
+                                    ) : (
+                                        <RxAvatar
+                                            className="h-12 w-12"
 
+                                        />
+                                    )}
+
+
+
+                                    <div className='flex flex-col text-ellipsis justify-center mx-3'>
+                                        <p className="text-2xl font-sans font-semibold ">
+                                            {conversationData.userDetails.name || "Guest"}
+                                        </p>
+
+                                        {
+                                            conversationData.lastMessage.text ? (<p className='text-xs line-clamp-1'>{conversationData.lastMessage.text}</p>)
+                                                : (<p className='text-xs text-ellipsis line-clamp-1'>send a Attachment</p>)
+                                        }
+
+
+                                    </div>
+
+                                    {
+                                        conversationData.countUnseen > 0 && <p className='ml-auto' >{conversationData.countUnseen}</p>
+                                    }
+
+                                </div>
+                            </Link>
+                        )
+                    })
                 }
             </div>
+            <div ref={UserEndRef} />
+
 
             {/* Footer */}
             <div className="h-14 border-t flex justify-between items-center">
@@ -91,7 +169,7 @@ useEffect(()=>{
                 </div>
             </div>
             {
-                openSearch && <SearchPerson isOpen={()=>{setopenSearch(false)}} />
+                openSearch && <SearchPerson isOpen={() => { setopenSearch(false) }} />
             }
         </div>
     );

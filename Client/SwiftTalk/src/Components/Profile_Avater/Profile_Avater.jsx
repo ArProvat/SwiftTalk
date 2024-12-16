@@ -3,9 +3,10 @@ import { PiCirclesThreePlusBold } from "react-icons/pi";
 import { RxAvatar } from "react-icons/rx";
 import { Link } from 'react-router-dom';
 import { IoMdArrowRoundBack } from "react-icons/io";
+import Sidebar from './../Sidebar/Sidebar';
 
 
-const Profile_Avater = ({ User_id, PhotoUrl, name, isOnline }) => {
+const Profile_Avater = ({  PhotoUrl, name, isOnline }) => {
 
     return (
         <div className="h-16 border-2 px-2 flex justify-between items-center">
