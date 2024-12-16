@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from '../../assets/Logo_swiftTalk.jpg';
 import { TbLogout2 } from "react-icons/tb";
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,11 +13,14 @@ import { useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
     const Selector = useSelector((state) => state.user);
+    const 
     const [openSearch, setopenSearch] = useState(false);
     const dispatch = useDispatch()
     const selector = useSelector((state) => state.user)
     const navigate = useNavigate()
+useEffect(()=>{
 
+},[])
     const handleLogout = async () => {
         try {
             const response = await axios.post('http://localhost:8000/api/logout', {}, { withCredentials: true });
@@ -57,6 +60,9 @@ const Sidebar = () => {
                     <h3 className='text-2xl text-white font-semibold '>Messages</h3>
                     < IoMdPersonAdd onClick={() => setopenSearch(true)} title='Add person' className='text-3xl text-white hover:cursor-pointer' />
                 </div>
+                {
+
+                }
             </div>
 
             {/* Footer */}
