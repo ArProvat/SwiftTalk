@@ -1,6 +1,7 @@
-const mongoose = require('mongoose');
-require('dotenv').config({ path: '.env' });
-
+import pkg from 'mongoose';
+const { connect, connection: _connection } = pkg;
+import dotenv from 'dotenv';
+dotenv.config({ path: '.env' });
 const connection = async () => {
     try {
         const dbUrl = process.env.DB_URL;
@@ -8,10 +9,10 @@ const connection = async () => {
             throw new Error("DB_URL is not defined in .env file");
         }
 
-        await mongoose.connect(dbUrl);
+        await connect(dbUrl);
         console.log('Connection successful');
         
-        const connection = mongoose.connection;
+        const connection = _connection;
         connection.on('error', (error) => {
             console.log('Connection error', error);
         });
@@ -20,4 +21,4 @@ const connection = async () => {
     }
 };
 
-module.exports = connection;
+export default connection;

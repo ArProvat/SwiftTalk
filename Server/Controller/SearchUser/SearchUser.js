@@ -1,11 +1,11 @@
-const User = require('../../Models/UsersModel/UsersModel')
+import UsersModel from '../../Models/UsersModel/UsersModel.js';
 
 const SearchUser = async (req, res) => {
     try {
         const { search } = req.body;
         const query = new RegExp(search, 'i', 'g');
 
-        const user = await User.find({
+        const user = await UsersModel.find({
             '$or': [
                 { name: query },
                 { email: query }
@@ -27,4 +27,4 @@ const SearchUser = async (req, res) => {
 
 
 }
-module.exports = SearchUser
+export default SearchUser

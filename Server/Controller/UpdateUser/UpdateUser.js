@@ -1,5 +1,5 @@
-const getUserByToken = require("../../helper/getUserByToken/getUserByToken");
-const User = require("../../Models/UsersModel/UsersModel");
+import getUserByToken from "../../helper/getUserByToken/getUserByToken.js";
+import UsersModel from "../../Models/UsersModel/UsersModel.js";
 
 const UpdateUse=async(req,res)=>{
     const token = req.cookies.token;
@@ -7,15 +7,15 @@ const UpdateUse=async(req,res)=>{
     const user = await getUserByToken(token)
 
     const {name,photoUrl}= req.body;
-    const Update= await User.updateOne({_id:user._id},{
+    const Update= await UsersModel.updateOne({_id:user._id},{
         name,
         photoUrl
     })
 
-    const UpdatedUser = await User.findOne(Update._id);
+    const UpdatedUser = await UsersModel.findOne(Update._id);
     res.status(201).json({
         message: 'Updated user',
         data: UpdatedUser
     })
 }
-module.exports =UpdateUse
+export default UpdateUse

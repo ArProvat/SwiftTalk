@@ -11,4 +11,4 @@ const logout =async (req, res) => {
         .json({ message: 'Logout successful' });
 };
 
-module.exports = logout;
+export default logout;

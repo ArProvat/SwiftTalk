@@ -1,5 +1,6 @@
-const jwt = require('jsonwebtoken')
-const users = require('../../Models/UsersModel/UsersModel')
+import jsonwebtoken from 'jsonwebtoken';
+const {verify} =jsonwebtoken
+import UsersModel from '../../Models/UsersModel/UsersModel.js';
 
 const getUserByToken=async(token)=>{
 if(!token){
@@ -8,9 +9,9 @@ if(!token){
         logout: true
     }
 }
-const info = await jwt.verify(token,process.env.SECRET_KEY);
+const info = await verify(token,process.env.SECRET_KEY);
 
-const user = await users.findById(info.id).select('-password')
+const user = await UsersModel.findById(info.id).select('-password')
 return user;
 }
-module.exports =getUserByToken;
+export default getUserByToken;

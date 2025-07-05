@@ -1,20 +1,20 @@
-const mongoose = require('mongoose')
+import { Schema, model } from 'mongoose';
 
 
-const ConversationSchema = new mongoose.Schema({
+const ConversationSchema = new Schema({
     sender: {
-        type : mongoose.Schema.ObjectId,
+        type : Schema.ObjectId,
         required : true ,
         ref:'User'
     },
     receiver:{
-        type : mongoose.Schema.ObjectId,
+        type : Schema.ObjectId,
         required: true,
         ref:'User'
     },
     messages:[
         {
-            type:mongoose.Schema.ObjectId,
+            type:Schema.ObjectId,
             ref:'Message'
         }
     ]
@@ -22,6 +22,6 @@ const ConversationSchema = new mongoose.Schema({
     timestamps:true
 })
 
-const Conversation_model = mongoose.model('conversation', ConversationSchema)
+const Conversation_model =  model('conversation', ConversationSchema)
 
-module.exports = Conversation_model;
+export default Conversation_model;

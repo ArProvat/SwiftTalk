@@ -1,25 +1,33 @@
-const mongoose = require('mongoose')
+import { Schema, model } from 'mongoose';
 
-const messagesSchema = new mongoose.Schema({
-    text:{
-        type: 'string',
+const messagesSchema = new Schema({
+    text: {
+        type: String, 
         default: ''
     },
-    imageUrl:{
-        type: 'string',
-        default: ''
-    }, 
-    VideoUrl:{
-        type: 'string',
-        default: ''
-    },
-    seen:{
-        type: 'boolean',
-    },
-},{
-timestamps:true
-})
 
-const messageModel = new mongoose.Model('message',messagesSchema)
+    fileDetails: {
+        Url: {
+            type: String, 
+            default: ''
+        },
+        Format: {
+            type: String, 
+            default: ''
+        }
+    },
+    seen: {
+        type: Boolean, 
+        default: false 
+    },
+    msgSendBy: {
+        type: Schema.Types.ObjectId, 
+        required: true,
+        ref: 'User'
+    },
+}, {
+    timestamps: true
+});
 
-module.exports = messageModel;
+const messageModel = model('Message', messagesSchema); 
+export default messageModel;

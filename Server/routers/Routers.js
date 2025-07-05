@@ -1,11 +1,11 @@
-const express = require('express');
-const registerUser = require('../Controller/RegisterUser/Register');
-const CheckAuth = require('../Controller/CheckAuth/CheckAuth');
-const UserDetails = require('../Controller/UserDetails/UserDetails');
-const logout = require('../Controller/Logout/Logout');
-const UpdateUse = require('../Controller/UpdateUser/UpdateUser');
-const  SearchUser = require('../Controller/SearchUser/SearchUser');
-const router = express.Router()
+import { Router } from 'express';
+import registerUser from '../Controller/RegisterUser/Register.js';
+import CheckAuth from '../Controller/CheckAuth/CheckAuth.js';
+import UserDetails from '../Controller/UserDetails/UserDetails.js';
+import logout from '../Controller/Logout/Logout.js';
+import UpdateUse from '../Controller/UpdateUser/UpdateUser.js';
+import SearchUser from '../Controller/SearchUser/SearchUser.js';
+const router = Router()
 
 router.post("/register",registerUser)
 //login
@@ -19,4 +19,4 @@ router.put("/update",UpdateUse);
 //search user
 router.post("/search",SearchUser);
 
-module.exports = router
+export default router

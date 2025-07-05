@@ -1,5 +1,5 @@
-const getUserByToken = require('../../helper/getUserByToken/getUserByToken');
-const users = require('../../Models/UsersModel/UsersModel')
+import getUserByToken from '../../helper/getUserByToken/getUserByToken.js';
+import UsersModel from '../../Models/UsersModel/UsersModel.js';
 
 const UserDetails=async(req,res)=>{
   try {
@@ -17,4 +17,4 @@ const UserDetails=async(req,res)=>{
 
     
 }
-module.exports = UserDetails;
+export default UserDetails;
