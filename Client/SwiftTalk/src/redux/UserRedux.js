@@ -6,6 +6,7 @@ const initialState = {
     userEmail: '',
     PhotoUrl: '',
     token: '',
+    Theme:'light',
     OnlineUser: [],
     SocketConnection: null,
 }
@@ -19,6 +20,9 @@ export const userState = createSlice({
             state.userEmail = action.payload.email
             state.PhotoUrl = action.payload.photoUrl
 
+        },
+        setTheme:(state,action)=>{
+state.Theme=action.payload
         },
         setToken: (state, action) => {
             state.token = action.payload
@@ -39,5 +43,5 @@ export const userState = createSlice({
 
     },
 });
-export const { addUser, logout, setToken, setOnlineUser,SocketConnection } = userState.actions;
+export const { setTheme,addUser, logout, setToken, setOnlineUser,SocketConnection } = userState.actions;
 export default userState.reducer;

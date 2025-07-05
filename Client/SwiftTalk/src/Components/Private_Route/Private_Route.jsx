@@ -1,26 +1,16 @@
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-const Private_Route = ({children}) => {
-const navigate = useNavigate()
-
-useEffect(() => {
-    if (!localStorage.getItem('token')) {
-        navigate('/login'); 
+const Private_Route = ({ children }) => {
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
+console.log(token);
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
     }
-}, [localStorage.getItem('token')]);
+  }, [token, navigate]); 
 
-
-if (localStorage.getItem('token')) {
-    return children;
+  return token ? children : null; 
 }
-
-    return (
-        <div>
-            
-        </div>
-    );
-};
-
 export default Private_Route;

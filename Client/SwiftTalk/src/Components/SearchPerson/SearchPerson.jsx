@@ -39,7 +39,7 @@ const SearchPerson = ({ isOpen }) => {
     }, [SearchValue]);
    
     return (
-        <div className="fixed top-0 left-0 right-0 bottom-0 bg-slate-700 bg-opacity-40">
+        <div className="fixed z-30 top-0 left-0 right-0 bottom-0 bg-slate-700 bg-opacity-40">
             <div className="w-full mx-auto flex flex-col max-w-md mt-28 lg:mt-20">
 
                 <div className="h-12 w-full rounded-lg overflow-hidden flex bg-white">
